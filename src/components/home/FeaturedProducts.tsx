@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,16 +14,10 @@ interface FeaturedProductsProps {
 
 export default function FeaturedProducts({ products, title, viewAllLink }: FeaturedProductsProps) {
   console.log("FeaturedProducts rendering - checking if CartProvider context is available");
-
-  let cartContext = null;
-  try {
-    cartContext = useCart();
-    console.log("Cart context successfully accessed:", cartContext !== null);
-  } catch (error) {
-    console.error("Error accessing cart context:", error);
-  }
   
-  const { addToCart } = cartContext || { addToCart: () => console.error("addToCart not available") };
+  const { addToCart } = useCart();
+  console.log("Cart context successfully accessed:", addToCart !== undefined);
+  
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
 
   return (
