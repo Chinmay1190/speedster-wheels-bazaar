@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { useCart } from "../contexts/CartContext";
@@ -32,8 +32,15 @@ const CheckoutPage = () => {
   };
   
   // If cart is empty, redirect to cart page
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate("/cart");
+    }
+  }, [cartItems, navigate]);
+  
+  // We need to return JSX even if we're going to redirect
   if (cartItems.length === 0) {
-    return navigate("/cart");
+    return null; // Return null while the useEffect triggers the navigation
   }
   
   return (
