@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useCart } from "../../contexts/CartContext";
 import { Product } from "../../types";
 import { formatPrice } from "../../utils/format";
 
@@ -12,18 +12,7 @@ interface FeaturedProductsProps {
   viewAllLink?: string;
 }
 
-export default function FeaturedProducts({ products, title, viewAllLink }: FeaturedProductsProps) {
-  console.log("FeaturedProducts rendering - checking if CartProvider context is available");
-
-  let cartContext = null;
-  try {
-    cartContext = useCart();
-    console.log("Cart context successfully accessed:", cartContext !== null);
-  } catch (error) {
-    console.error("Error accessing cart context:", error);
-  }
-  
-  const { addToCart } = cartContext || { addToCart: () => console.error("addToCart not available") };
+export default function SimpleFeaturedProducts({ products, title, viewAllLink }: FeaturedProductsProps) {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
 
   return (
@@ -84,13 +73,14 @@ export default function FeaturedProducts({ products, title, viewAllLink }: Featu
                     ${hoveredProduct === product.id ? "translate-y-0" : "translate-y-full"}
                   `}
                 >
-                  <Button 
-                    onClick={() => addToCart(product)} 
-                    className="w-full bg-primary hover:bg-primary/90"
-                    disabled={!product.inStock}
-                  >
-                    {product.inStock ? "Add to Cart" : "Out of Stock"}
-                  </Button>
+                  <Link to={`/product/${product.id}`}>
+                    <Button 
+                      className="w-full bg-primary hover:bg-primary/90"
+                      disabled={!product.inStock}
+                    >
+                      {product.inStock ? "View Details" : "Out of Stock"}
+                    </Button>
+                  </Link>
                 </div>
               </div>
               
